@@ -14,6 +14,7 @@ services:
     depends_on:
       - web
       - redis
+
   redis:
     image: redis:alpine
     ports:
