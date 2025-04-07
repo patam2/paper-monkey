@@ -13,6 +13,4 @@ app = Celery(
 app.conf.update(enable_utc=True)
 
 
-print(app.tasks)
-
 #app.conf.beat_schedule()
