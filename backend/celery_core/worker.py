@@ -1,13 +1,18 @@
 from celery import Celery
-from app.newsletter.generate import generate_newsletter
 
 
 
-app = Celery('tasks', broker='redis://redis:6379')
+app = Celery(
+    'monkeymail', 
+    broker='redis://localhost:6379',
+    backend='redis://localhost:6379',  
+    include=['celery_core.tasks.newsletter']
+)
+
+#app.autodiscover_tasks(['celery_core.tasks.newsletter'])
+app.conf.update(enable_utc=True)
 
 
-@app.task(name='tasks.generate_newsletter')
-def mail():
-    print()
-    print(generate_newsletter())
-#app.conf.imports = ['tasks.generate_newsletter']
+print(app.tasks)
+
+#app.conf.beat_schedule()
