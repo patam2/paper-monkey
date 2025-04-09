@@ -1,16 +1,20 @@
 import { StrictMode } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
-import './index.css'
 import App from './App.tsx'
-import Compose from './Compose.tsx'
+import NewsletterHomePage from './newsletter/Newsletter.tsx'
+import ComposeNewsletterPage from './newsletter/Compose.tsx'
+
+import './style.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/compose" element={<Compose />} />
+        <Route path="/newsletter" element={<NewsletterHomePage/>}>
+          <Route path="compose" element={<ComposeNewsletterPage/>}/>
+        </Route>
       </Routes>
     </BrowserRouter>
   </StrictMode>,
