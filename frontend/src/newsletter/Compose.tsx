@@ -1,14 +1,32 @@
-export default function ComposeNewsletterPage () {
-    const handleSubmit = (event: React.MouseEvent<HTMLInputElement>) => {
-        let email = (document.getElementById("email_address") as HTMLInputElement).value;
-        console.log("Submit button clicked", email);
-    }
-    return (
-        <>
-            <h3>Compose your new newsletter here!</h3>
-            <input type="text" id="email_address" placeholder="Your email" />
-            <input type="submit" onClick={(e) => handleSubmit(e)}></input>
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import NewsletterItem from "./corecomponents/NewsletterItemBox";
 
-        </>
+
+interface NewsletterItemConfig {
+    settings: string
+}
+
+
+export default function ComposeNewsletterPage () {
+    const [newsletterItems, setNewsletterItems] = useState<NewsletterItemConfig[]>([]);
+
+    const DeleteNewsletterByIndex = (index: number) => {
+        const newItems = [...newsletterItems];
+        // Remove the item at the specified index
+        newItems.splice(index, 1);
+        // Update state with the new array
+        setNewsletterItems(newItems);
+
+    }
+    //add useeffect fetch here...
+    return (
+        <div className="w-5/6 flex items-center flex-col p-2 border-2 border-dashed border-black rounded-3xl">
+            {newsletterItems.map((obj, index) => (
+                    <NewsletterItem settings={obj.settings} index={index} deleteFunction={DeleteNewsletterByIndex}/>
+                )
+            )}
+            <Button className="w-full" onClick={() => setNewsletterItems([...newsletterItems, {settings: "Weather"}])}>Add new element</Button>
+        </div>
     )
 }
