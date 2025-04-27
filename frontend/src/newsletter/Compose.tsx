@@ -1,16 +1,14 @@
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import NewsletterItem from "./corecomponents/NewsletterItemBox";
 
 
-interface NewsletterItemConfig {
-    settings: string
-}
+import { ElementType } from "@/components/compose/comboboxselect";
+import NewsletterItem from "../components/compose/NewsletterItemBox";
+import ElementChooserDialog from "@/components/compose/elementchooser";
+
 
 
 export default function ComposeNewsletterPage () {
-    const [newsletterItems, setNewsletterItems] = useState<NewsletterItemConfig[]>([]);
-
+    const [newsletterItems, setNewsletterItems] = useState<ElementType[]>([]);
     const DeleteNewsletterByIndex = (index: number) => {
         const newItems = [...newsletterItems];
         // Remove the item at the specified index
@@ -19,14 +17,24 @@ export default function ComposeNewsletterPage () {
         setNewsletterItems(newItems);
 
     }
+
+    function AddNewItemToNewsletterState (element: void): void;
+    function AddNewItemToNewsletterState (element: ElementType): void;
+
+    function AddNewItemToNewsletterState (element: unknown): void {
+        if (element && typeof element === 'object') {
+            setNewsletterItems([...newsletterItems, element as ElementType])
+        }
+    }
+
     //add useeffect fetch here...
     return (
         <div className="w-5/6 flex items-center flex-col p-2 border-2 border-dashed border-black rounded-3xl">
             {newsletterItems.map((obj, index) => (
-                    <NewsletterItem settings={obj.settings} index={index} deleteFunction={DeleteNewsletterByIndex}/>
+                    <NewsletterItem settings={obj.label} index={index} deleteFunction={DeleteNewsletterByIndex}/>
                 )
             )}
-            <Button className="w-full" onClick={() => setNewsletterItems([...newsletterItems, {settings: "Weather"}])}>Add new element</Button>
+            <ElementChooserDialog addElement={AddNewItemToNewsletterState}/>
         </div>
     )
 }
