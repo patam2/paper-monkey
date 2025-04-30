@@ -18,10 +18,7 @@ export default function ComposeNewsletterPage () {
 
     }
 
-    function AddNewItemToNewsletterState (element: void): void;
-    function AddNewItemToNewsletterState (element: ElementType): void;
-
-    function AddNewItemToNewsletterState (element: unknown): void {
+    function AddNewItemToNewsletterState (element: ElementType | null): void {
         if (element && typeof element === 'object') {
             setNewsletterItems([...newsletterItems, element as ElementType])
         }

@@ -1,7 +1,6 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogFooter,
@@ -15,6 +14,8 @@ import { ComboboxPopover } from "./comboboxselect"
 
 import { ElementType } from "./comboboxselect"
 
+import ConfigureChosenElement from "./configurechosenelement"
+
 interface AddElementFunction {
     (element: ElementType): void
 }
@@ -25,7 +26,7 @@ interface ElementChooserDialogProps {
 
 
 export default function ElementChooserDialog ({addElement}: ElementChooserDialogProps) {
-    const [chosenElement, setChosenElement] = useState<ElementType | null>()
+    const [chosenElement, setChosenElement] = useState<ElementType | null>(null)
     return (
         <Dialog>
             <DialogTrigger className="bg-black rounded-3xl p-2 w-full">Add new element</DialogTrigger>
@@ -35,7 +36,7 @@ export default function ElementChooserDialog ({addElement}: ElementChooserDialog
                 </DialogHeader>
                 <div>
                     <ComboboxPopover setChosenElement={setChosenElement}/>
-                    Selected element: {chosenElement?.label}
+                    <ConfigureChosenElement chosenElement={chosenElement}/>
                 </div>
                 <DialogFooter className="justify-end">
                 <DialogClose asChild>
