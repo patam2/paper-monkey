@@ -4,7 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "express": "^5.1.0"
+    "bcrypt-ts": "^6.0.0",
+    "express": "^5.1.0",
+    "pg": "^8.15.6",
+    "redis": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
@@ -18,7 +21,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec npx ts-node src/server.ts",
+    "dev": "nodemon -V --delay 1 --watch src --ext ts,js --exec npx ts-node src/server.ts",
     "lint": "eslint 'src/**/*.ts'"
   }
 }

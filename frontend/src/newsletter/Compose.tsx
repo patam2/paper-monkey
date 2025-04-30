@@ -19,6 +19,7 @@ export default function ComposeNewsletterPage () {
     }
 
     function AddNewItemToNewsletterState (element: ElementType | null): void {
+        console.log(import.meta.env.VITE_API_URL)
         if (element && typeof element === 'object') {
             setNewsletterItems([...newsletterItems, element as ElementType])
         }

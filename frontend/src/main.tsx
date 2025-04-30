@@ -6,6 +6,7 @@ import NewsletterHomePage from './newsletter/NewsletterPage.tsx'
 import ComposeNewsletterPage from './newsletter/Compose.tsx'
 
 import './style.css'
+import Auth from './components/auth.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/newsletter" element={<NewsletterHomePage/>}>
           <Route path="compose" element={<ComposeNewsletterPage/>}/>
         </Route>
+        <Route path='/auth' element={<Auth/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

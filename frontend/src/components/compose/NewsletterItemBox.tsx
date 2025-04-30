@@ -36,10 +36,7 @@ export default function NewsletterItem ({settings, index, deleteFunction}: Newsl
                         <DropdownMenuItem onClick={() => deleteFunction(index)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-
-
-                </div>
-               
+                </div> 
             </div>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel porro veniam praesentium quia obcaecati consequatur quam dolorem libero ex iusto deserunt, minus blanditiis corrupti harum. Nulla atque error animi architecto. </p>
         </div>
