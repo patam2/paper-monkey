@@ -1,19 +1,15 @@
 services:
-  web:
+  backend:
     build: './backend'
     command: uvicorn app.main:app --host 0.0.0.0
     ports:
       - 8004:8000
     depends_on:
       - redis
-  celery:
-    build: './backend'
-    command: celery -A celery_core.worker worker --loglevel=info
+  frontend:
+    build: './frontend'
     ports:
-      - 5556:5556
-    depends_on:
-      - web
-      - redis
+     - 5173:5173
 
   redis:
     image: redis:alpine
