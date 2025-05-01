@@ -10,7 +10,8 @@
     "express": "^5.1.0",
     "kysely": "^0.28.2",
     "pg": "^8.15.6",
-    "redis": "^5.0.0"
+    "redis": "^5.0.0",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

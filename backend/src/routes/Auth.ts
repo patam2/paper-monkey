@@ -8,6 +8,8 @@ const apiRouter = Router();
 import { insertUser, getUserByEmail } from '../utils/database/users';
 import { NewUser } from '../utils/database/types';
 
+
+
 async function handleLoginPostRequest(req: Request, res: Response): Promise<void> {
   if (!req.body) {
     res.send({ errors: 'Invalid json' });

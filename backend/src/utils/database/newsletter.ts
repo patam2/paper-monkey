@@ -9,10 +9,11 @@ export async function getNewsletterByNewsletterId(newsletterId: number): Promise
   return await db.selectFrom('newsletters').where('id', '=', newsletterId).selectAll().executeTakeFirst();
 }
 
-export async function updateNewsletterById(newsletterId: number, newsletterElements: NewsletterElementType) {
+export async function updateNewsletterById(newsletterId: number, userid: number, newsletterElements: NewsletterElementType) {
   await db.updateTable('newsletters')
     .set({ configuration: JSON.stringify(newsletterElements) })
     .where('id', '=', newsletterId)
+    .where('userid', '=', userid)
     .executeTakeFirst();
 }
 
