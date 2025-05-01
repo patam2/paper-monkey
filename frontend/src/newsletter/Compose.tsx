@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 import { ElementType } from "@/components/compose/comboboxselect";
@@ -9,6 +9,11 @@ import ElementChooserDialog from "@/components/compose/elementchooser";
 
 export default function ComposeNewsletterPage () {
     const [newsletterItems, setNewsletterItems] = useState<ElementType[]>([]);
+
+    useEffect(() => {
+        //   
+    }, [newsletterItems])
+
     const DeleteNewsletterByIndex = (index: number) => {
         const newItems = [...newsletterItems];
         // Remove the item at the specified index
