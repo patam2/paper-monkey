@@ -26,6 +26,7 @@ export function LoginForm() {
       method: 'POST',
       body: JSON.stringify(values),
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     });
     const json = await response.json();
     if ('errors' in json) {

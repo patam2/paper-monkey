@@ -5,14 +5,26 @@ import { ElementType } from "@/components/compose/comboboxselect";
 import NewsletterItem from "../components/compose/NewsletterItemBox";
 import ElementChooserDialog from "@/components/compose/elementchooser";
 
+import { useParams } from "react-router";
 
+
+type params = {
+    id: string
+}
 
 export default function ComposeNewsletterPage () {
     const [newsletterItems, setNewsletterItems] = useState<ElementType[]>([]);
 
+    const { id } = useParams<params>()
+
     useEffect(() => {
-        //   
-    }, [newsletterItems])
+        fetch(`${import.meta.env.VITE_API_URL}/newsletter/${id}`, {'method': "GET", 'credentials': 'include'}).then((resp) => {
+            resp.json()}).then((json) => {console.log(json)})
+    }, []);
+
+    useEffect(() => {
+        //fetch(`${import.meta.env.VITE_API_URL}/newsletter/${id}`)   
+    }, [newsletterItems]);
 
     const DeleteNewsletterByIndex = (index: number) => {
         const newItems = [...newsletterItems];

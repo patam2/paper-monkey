@@ -13,8 +13,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/newsletter" element={<NewsletterHomePage/>}>
-          <Route path="compose" element={<ComposeNewsletterPage/>}/>
+        <Route path="/newsletter/" element={<NewsletterHomePage/>}>
+          <Route path="compose/:id" element={<ComposeNewsletterPage/>}/>
         </Route>
         <Route path='/auth' element={<Auth/>} />
       </Routes>

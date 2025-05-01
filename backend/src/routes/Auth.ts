@@ -9,6 +9,8 @@ import { insertUser, getUserByEmail } from '../utils/database/users';
 import { NewUser } from '../utils/database/types';
 
 
+import { AppRedisClient } from '../app';
+import generateCookie from '../utils/cookies/generation';
 
 async function handleLoginPostRequest(req: Request, res: Response): Promise<void> {
   if (!req.body) {
@@ -28,7 +30,9 @@ async function handleLoginPostRequest(req: Request, res: Response): Promise<void
     const authStatus = await compare(userData.password, response?.password || '');
     //console.log(response?.password, userData.password, await compare(response?.password || "", userData.password))
     if (authStatus) {
-      res.status(200).send({ successful: { userId: response?.user_id } });
+      const cookie = generateCookie()
+      AppRedisClient.setValue(cookie, {userid: response!.user_id, name: response!.name})
+      res.cookie("user", cookie).status(200).send({ successful: { userId: response!.user_id } }); //todo add autoexpire both as cookie and redis state
     } else {
       res.status(403).send({ errors: 'Wrong password' });
     }

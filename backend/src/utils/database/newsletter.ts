@@ -10,7 +10,7 @@ export async function getNewsletterByNewsletterId(newsletterId: number): Promise
 }
 
 export async function updateNewsletterById(newsletterId: number, userid: number, newsletterElements: NewsletterElementType) {
-  await db.updateTable('newsletters')
+  return await db.updateTable('newsletters')
     .set({ configuration: JSON.stringify(newsletterElements) })
     .where('id', '=', newsletterId)
     .where('userid', '=', userid)
@@ -18,11 +18,14 @@ export async function updateNewsletterById(newsletterId: number, userid: number,
 }
 
 export async function createNewNewsletter(userId: number): Promise<{id: number} | undefined> {
+  try{
     return await db.insertInto('newsletters').values(
-        {
-            'userid': userId,
-            'configuration': JSON.stringify({'newsletter_elements': []})
-        }
-    ).returning(['id']).executeTakeFirst()
-    
+      {
+          'userid': userId,
+          'configuration': JSON.stringify({'newsletter_elements': []})
+      }).returning(['id']).executeTakeFirst()
+  } catch (err) {
+    console.error(err);
+    throw err
+  }
 }
