@@ -9,7 +9,7 @@ interface UserCredentials {
 
 
 class BaseForm {
-    hash_password(password: string): string{
+    hash_password(password: string, ): string{
         const salt = genSaltSync(10)
         const hash = hashSync(password, salt)
         return hash
@@ -22,7 +22,7 @@ class BaseForm {
 
 export class LoginUser extends BaseForm {
     public email: string
-    private hashed_password: string
+    public password: string
 
     public static validate_credentials(credentials: UserCredentials): {isValid: boolean, errors: string[]} {
         const errors = []
@@ -47,10 +47,11 @@ export class LoginUser extends BaseForm {
             throw new Error('Validation failed')
         }
         this.email = credentials.email
-        this.hashed_password = this.hash_password(credentials.password)
+        this.password = credentials.password
     }
 
     public static createFromForm(formData: any): LoginUser | {errors: string[]} {
+        console.log(formData)
         const credentials: UserCredentials = {
             email: formData.email,
             password: formData.password
@@ -68,12 +69,11 @@ export class LoginUser extends BaseForm {
 
 export class SignUpUser extends BaseForm {
     public email: string
-    public name: string | undefined
-    private hashed_password: string
+    public name: string
+    public password: string
 
     public static validate_credentials(credentials: UserCredentials): {isValid: boolean, errors: string[]} {
         const errors = []
-        console.log(credentials)
         if (!('email' in credentials) || !('password' in credentials) || !(credentials.name !== undefined)) {
             errors.push('Missing fields')
         }
@@ -95,8 +95,8 @@ export class SignUpUser extends BaseForm {
             throw new Error('Validation failed')
         }
         this.email = credentials.email
-        this.name = credentials.name
-        this.hashed_password = this.hash_password(credentials.password)
+        this.name = credentials.name  || ''
+        this.password = this.hash_password(credentials.password)
     }
 
     public static createFromForm(formData: any): SignUpUser | {errors: string[]} {

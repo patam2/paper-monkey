@@ -14,6 +14,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Button } from "../ui/button"
+import { useNavigate } from "react-router"
+
 
 const formSchema = z.object({
     email: z.string().email({message: "Enter a valid email address"}),
@@ -22,15 +24,28 @@ const formSchema = z.object({
 })
 
 export function SignupForm() {
+    const navigate = useNavigate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             "email": ""
         }
     })
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
+            method: "POST",
+            body: JSON.stringify(values),
+            headers: {"Content-Type": "application/json"}
+        })
+        const json = await response.json()  
+        if ('errors' in json) {
+            console.log(json)
+        } 
+        if (response.status === 200) {
+            navigate('/newsletter/compose')
+        }
     }
+
 
     return (
         <Form {...form}>
