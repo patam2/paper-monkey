@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { AppSidebar } from "@/components/app-sidebar";
 
 import { useState } from "react";
+import NewsletterDisplayCards from "@/components/newsletter/newsletterDisplayCards";
 // /newsletter
 export default function NewsletterHomePage() {
     const [open, setOpen] = useState(true)
@@ -21,7 +22,7 @@ export default function NewsletterHomePage() {
                                 <div className="text-black pb-3">
                                     <p className="text-xl">Newsletters</p>
                                 </div>
-                                {outlet || <p className="text-black">Your newsletters:</p>}
+                                {outlet || <><p className="text-black">Your newsletters:</p><NewsletterDisplayCards/></>}
                             </div>
                         </div>
                     </main>

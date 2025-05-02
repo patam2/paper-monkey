@@ -106,4 +106,4 @@ async function getNewsletterByUser(req: Request, res: Response) {
 newsletterRouter.post('/:id', updateNewsletter)
 newsletterRouter.get('/:id', getNewsletter)
 newsletterRouter.get('/all', getNewsletterByUser)
-newsletterRouter.put('/:id', createNewsletter)
+newsletterRouter.put('/', createNewsletter)

@@ -37,6 +37,8 @@ export async function createNewNewsletter(userId: number): Promise<{id: number} 
     return await db.insertInto('newsletters').values(
       {
           'userid': userId,
+          'name': 'Newsletter',
+          'utcTime': "23:59:59",
           'configuration': JSON.stringify({'newsletter_elements': []})
       }).returning(['id']).executeTakeFirst()
   } catch (err) {
