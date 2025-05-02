@@ -15,7 +15,7 @@ interface DeleteFunc {
     (index: number): void
 }
 interface NewsletterItemProps {
-    settings: string,
+    settings: any,
     index: number
     deleteFunction: DeleteFunc
 }
@@ -23,15 +23,17 @@ interface NewsletterItemProps {
 
 export default function NewsletterItem ({settings, index, deleteFunction}: NewsletterItemProps) {
     const [itemWidth, setItemWidth] = useState('full')
-    return (
+    console.log(settings)
+    const copiedSettings = {...settings}
+    return (    
         <div className={"mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-" + itemWidth}>
             <div className="w-full flex items-end justify-center">
-                <p className="flex flex-1 justify-center text-xl">{settings}</p>
+                <p className="flex flex-1 justify-center text-xl">{JSON.stringify(copiedSettings)}</p>
                 <div className="flex justify-end    ms-auto">
                 <DropdownMenu>
                     <DropdownMenuTrigger><EllipsisVertical/></DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel>{settings}</DropdownMenuLabel>
+                        <DropdownMenuLabel>aa</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => deleteFunction(index)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>

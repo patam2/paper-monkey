@@ -18,9 +18,11 @@ import {
 
 export type ElementType = {
     label: string,
-    elementcode: string  
+    elementcode: string ,
+    settings: any //add type here 
 }
- 
+
+
 export interface setChosenElementFunc {
     setChosenElement: (arg0: ElementType | null) => void
 }
@@ -29,10 +31,12 @@ const statuses: ElementType[] = [
   {
     label: "RSS feed",
     elementcode: "rss_feed",
+    settings: {}
   },
   {
     label: "Weather",
     elementcode: "weather",
+    settings: {}
   },
 ]
 

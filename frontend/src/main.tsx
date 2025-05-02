@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
@@ -9,7 +8,6 @@ import './style.css'
 import Auth from './components/auth.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
@@ -19,5 +17,4 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/auth' element={<Auth/>} />
       </Routes>
     </BrowserRouter>
-  </StrictMode>,
 )

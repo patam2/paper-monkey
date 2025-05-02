@@ -2,19 +2,34 @@ import { Newsletter, NewNewsletter, UpdateNewsletter, NewsletterElementType } fr
 import { db } from './client';
 
 export async function getNewslettersByUserId(userId: number): Promise<Newsletter[] | null> {
-  return await db.selectFrom('newsletters').where('userid', '=', userId).selectAll().execute();
+  try {
+    return await db.selectFrom('newsletters').where('userid', '=', userId).selectAll().execute();
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
 }
 
 export async function getNewsletterByNewsletterId(newsletterId: number): Promise<Newsletter | undefined> {
-  return await db.selectFrom('newsletters').where('id', '=', newsletterId).selectAll().executeTakeFirst();
+  try {
+    return await db.selectFrom('newsletters').where('id', '=', newsletterId).selectAll().executeTakeFirst();
+  } catch (err) {
+    console.error(err);
+    throw err
+  }
 }
 
 export async function updateNewsletterById(newsletterId: number, userid: number, newsletterElements: NewsletterElementType) {
-  return await db.updateTable('newsletters')
+  try {
+    return await db.updateTable('newsletters')
     .set({ configuration: JSON.stringify(newsletterElements) })
     .where('id', '=', newsletterId)
     .where('userid', '=', userid)
     .executeTakeFirst();
+  } catch (err) {
+    console.error(err);
+    throw err
+  }
 }
 
 export async function createNewNewsletter(userId: number): Promise<{id: number} | undefined> {

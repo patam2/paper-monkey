@@ -15,7 +15,7 @@ export interface WeatherElement {
     "name": "Weather",
     "settings": {
         "location": string,
-        "forecastDuration": "Tomorrow" | "3-days" | "Week"
+        "forecastDuration": "Tomorrow" | "3 days" | "Week"
     }
 }
 
@@ -29,12 +29,12 @@ const RSSFeedElementSchema = z.object({
     })
 });
 
-const WeatherElementSchema = z.object({
+export const WeatherElementSchema = z.object({
     id: z.literal("weather"),
     name: z.literal("Weather"),
     settings: z.object({
         location: z.string(),
-        forecastDuration: z.enum(["Tomorrow", "3-days", "Week"])
+        forecastDuration: z.enum(["Tomorrow", "3 days", "Week"])
     })
 });
 
