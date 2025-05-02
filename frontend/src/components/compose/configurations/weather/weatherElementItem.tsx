@@ -10,37 +10,37 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
   
+import { WeatherElementSettingsType } from "./weatherTypes" 
 
 interface DeleteFunc {
     (index: number): void
 }
 interface NewsletterItemProps {
-    settings: any,
+    settings: WeatherElementSettingsType,
     index: number
     deleteFunction: DeleteFunc
 }
 
 
-export default function NewsletterItem ({settings, index, deleteFunction}: NewsletterItemProps) {
-    const [itemWidth, setItemWidth] = useState('full')
+export default function WeatherNewsletterItem ({settings, index, deleteFunction}: NewsletterItemProps) {
     console.log(settings)
     const copiedSettings = {...settings}
     return (    
-        <div className={"mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-" + itemWidth}>
+        <div className={"mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-full" }>
             <div className="w-full flex items-end justify-center">
-                <p className="flex flex-1 justify-center text-xl">{JSON.stringify(copiedSettings)}</p>
+                <p className="flex flex-1 justify-center text-xl">Weather for {settings.location}</p>
                 <div className="flex justify-end    ms-auto">
                 <DropdownMenu>
                     <DropdownMenuTrigger><EllipsisVertical/></DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel>aa</DropdownMenuLabel>
+                        <DropdownMenuLabel>Weather</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => deleteFunction(index)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
                 </div> 
             </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel porro veniam praesentium quia obcaecati consequatur quam dolorem libero ex iusto deserunt, minus blanditiis corrupti harum. Nulla atque error animi architecto. </p>
+            <p>This will show the forecast for the {settings.forecastDuration} time period.</p>
         </div>
     )
 }

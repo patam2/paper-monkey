@@ -22,7 +22,7 @@ export type WeatherElement = {
  
 
 export const WeatherElementSettings = z.object({
-    location: z.string().default('Tallinn'),
+    location: z.string().default("Tallinn"),
     forecastDuration: z.enum(["Tomorrow", "3 days", "Week"]).default('3 days')
 })
 

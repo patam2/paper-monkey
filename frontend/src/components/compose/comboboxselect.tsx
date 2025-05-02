@@ -17,8 +17,8 @@ import {
 
 
 export type ElementType = {
-    label: string,
-    elementcode: string ,
+    name: string,
+    id: string ,
     settings: any //add type here 
 }
 
@@ -29,13 +29,13 @@ export interface setChosenElementFunc {
   
 const statuses: ElementType[] = [
   {
-    label: "RSS feed",
-    elementcode: "rss_feed",
+    name: "RSS feed",
+    id: "rss_feed",
     settings: {}
   },
   {
-    label: "Weather",
-    elementcode: "weather",
+    name: "Weather",
+    id: "weather",
     settings: {}
   },
 ]
@@ -63,7 +63,7 @@ export function ComboboxPopover({setChosenElement}: setChosenElementFunc) {
           >
             {selectedStatus ? (
               <>
-                {selectedStatus.label}
+                {selectedStatus.name}
               </>
             ) : (
               <>Choose an element</>
@@ -78,17 +78,17 @@ export function ComboboxPopover({setChosenElement}: setChosenElementFunc) {
               <CommandGroup>
                 {statuses.map((status) => (
                   <CommandItem
-                    key={status.elementcode}
-                    value={status.elementcode}
+                    key={status.id}
+                    value={status.id}
                     onSelect={(value) => {
                       setSelectedStatus(
-                        statuses.find((priority) => priority.elementcode === value) ||
+                        statuses.find((priority) => priority.id === value) ||
                           null
                       )
                       setOpen(false)
                     }}
                   >
-                    <span>{status.label}</span>
+                    <span>{status.name}</span>
                   </CommandItem>
                 ))}
               </CommandGroup>

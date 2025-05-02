@@ -12,7 +12,19 @@ newsletterRouter.use(cookieParser())
 newsletterRouter.use(cookieCheckingMiddleware)
 
 async function getNewsletter(req: Request, res: Response) {
-    const requestNewsletterId = Number(req.params.id)
+    if (req.params.id === "all") {
+        getNewsletterByUser(req, res)
+        return
+    }
+    else {
+        try {
+            var requestNewsletterId = Number(req.params.id)
+        } catch {
+            res.status(500).send({error: "Invalid id"})
+            return
+        }    
+    }
+
     try {
         var newsletter = await getNewsletterByNewsletterId(requestNewsletterId)
     } catch {
@@ -35,9 +47,13 @@ async function getNewsletter(req: Request, res: Response) {
 }
 
 async function updateNewsletter(req: Request, res: Response) {
+    console.log('Received newsletter update request')
     const result = NewsletterSchema.safeParse(req.body)
+    
     if (!result.success) {
+        console.log(result, 'line 40')
         res.status(500).send({'errors': 'Invalid form data.'})
+        return
     }
     const newsletterId = Number(req.params.id)
     const uid = (req as UserRequest).user?.userid 
@@ -71,6 +87,7 @@ async function createNewsletter(req: Request, res: Response){
 
 
 async function getNewsletterByUser(req: Request, res: Response) {
+
     const uid = (req as UserRequest).user!.userid 
     if (!uid) {
         res.status(500).send('Internal server error')

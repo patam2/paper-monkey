@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, useOutlet } from "react-router";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar";
 
@@ -6,7 +6,7 @@ import { useState } from "react";
 // /newsletter
 export default function NewsletterHomePage() {
     const [open, setOpen] = useState(true)
-
+    const outlet = useOutlet()
     return (
         <>
             <SidebarProvider open={open} onOpenChange={setOpen}>
@@ -19,12 +19,9 @@ export default function NewsletterHomePage() {
                             </div>
                             <div className="flex flex-col items-center p-4 bg-stone-200">
                                 <div className="text-black pb-3">
-                                    <p className="text-xl">Start editing your newsletter here</p>
-                                    <p className="text-base">Drag and drop elements and design your daily feed.</p>
+                                    <p className="text-xl">Newsletters</p>
                                 </div>
-                                <Outlet>
-
-                                </Outlet>
+                                {outlet || <p className="text-black">Your newsletters:</p>}
                             </div>
                         </div>
                     </main>

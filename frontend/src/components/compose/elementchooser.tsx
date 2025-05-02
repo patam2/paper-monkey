@@ -11,8 +11,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { ComboboxPopover } from "./comboboxselect"
-
 import { ElementType } from "./comboboxselect"
+import { WeatherConfigureElement } from "./configurations/weather/weatherConfigure"
 
 import ConfigureChosenElement from "./configurechosenelement"
 
@@ -24,12 +24,9 @@ interface ElementChooserDialogProps {
     addElement: AddElementFunction
 }
 
-import { WeatherElementSettings, WeatherElementSettingsType } from "./configurations/weather/weatherTypes" 
-import { WeatherConfigureElement } from "./configurations/weather/weatherConfigure"
-
 export default function ElementChooserDialog ({addElement}: ElementChooserDialogProps) {
     const [chosenElement, setChosenElement] = useState<ElementType | null>(null);
-    const [settings, setSettings] = useState<WeatherElementSettingsType>(WeatherElementSettings.parse({}))
+    const [settings, setSettings] = useState<any>()
 
     useEffect(() => {
         if (!chosenElement) return
@@ -49,7 +46,7 @@ export default function ElementChooserDialog ({addElement}: ElementChooserDialog
                     <ComboboxPopover setChosenElement={setChosenElement}/>
                     <ConfigureChosenElement chosenElement={chosenElement}/>
                 </div>
-                    {chosenElement?.elementcode === 'weather' && <WeatherConfigureElement settings={settings} setSettings={setSettings}/>}
+                    {chosenElement?.id === 'weather' && <WeatherConfigureElement setSettings={setSettings}/>}
                 <DialogFooter className="justify-end">
                 <DialogClose asChild>
                         <Button type="button" variant="secondary">

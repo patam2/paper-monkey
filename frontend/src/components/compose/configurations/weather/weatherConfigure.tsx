@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { Input } from "@/components/ui/input"
+import { useRef } from "react";
 import {
     Select,
     SelectContent,
@@ -9,31 +9,30 @@ import {
   } from "@/components/ui/select"
   
 
-import { WeatherElementSettings, WeatherElementSettingsType } from "./weatherTypes";
+import { WeatherElementSettingsType, WeatherElementSettings } from "./weatherTypes";
 
 
 interface ElementProps {
-    settings: WeatherElementSettingsType,
     setSettings: (settings: WeatherElementSettingsType) => void 
 }
 
-export function WeatherConfigureElement ({settings, setSettings}: ElementProps) {
-    const settingsCopy = {...settings}
+export function WeatherConfigureElement ({setSettings}: ElementProps) {
+    var settingsCopy = useRef(WeatherElementSettings.parse({}))
     const selectValueChange = (value: string) => {
         if (value === "Tomorrow" || value === "3 days" || value === "Week"){
-            settingsCopy.forecastDuration = value;
-            setSettings(settingsCopy)
+            settingsCopy.current.forecastDuration = value;
+            setSettings(settingsCopy.current)
         }
     }
     const changeValueChange = (value: React.ChangeEvent<HTMLInputElement>) => {
-        settingsCopy.location = value.target.value;
-        setSettings(settingsCopy)
+        settingsCopy.current.location = value.target.value;
+        setSettings(settingsCopy.current)
     }
     return (
-        <div>
-            <Input onChange={(value) => changeValueChange(value)} placeholder="Location"/>
+        <div className="flex">
+            <Input className="w-2/3" defaultValue="Tallinn" onChange={(value) => changeValueChange(value)} placeholder="Location"/>
             <Select onValueChange={(change) => selectValueChange(change)}>
-                <SelectTrigger>
+                <SelectTrigger className="w-1/3">
                     <SelectValue placeholder="Duration" />
                 </SelectTrigger>
                 <SelectContent>
