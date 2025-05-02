@@ -7,6 +7,8 @@ interface newsletterObject {
     newsletters: {
         id: number,
         userid: number,
+        name: string,
+        utctime: string,
         configuration: {
             newsletter_elements: any[]
         }
@@ -55,8 +57,8 @@ const NewsletterDisplayCards = () => {
         <div className="flex-col flex w-full items-center">
             {newsletters?.newsletters!.map((elem) => {
                 return (
-                    <div className="border-2 border-dashed border-black rounded-3xl p-2 w-5/6 m-2">
-                        {elem.id}
+                    <div className="border-2 border-dashed text-black border-black rounded-3xl p-2 w-5/6 m-2 hover:scale-105 hover:border-gray-800 transition-all">
+                        <span className="ms-1 font-bold">{elem.name}</span> | goes out every day <span className="text-gray-800">{elem.utctime.slice(0,5)}</span>, {elem.configuration.newsletter_elements.length} element  
                     </div>
                 )
             })

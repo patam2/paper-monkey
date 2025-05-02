@@ -44,5 +44,7 @@ const NewsletterElementSchema = z.discriminatedUnion("id", [
 ]);
 
 export const NewsletterSchema = z.object({
+    name: z.string(),
+    utctime: z.string(),
     newsletter_elements: z.array(NewsletterElementSchema)
 });

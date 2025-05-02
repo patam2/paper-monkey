@@ -58,7 +58,8 @@ async function updateNewsletter(req: Request, res: Response) {
     const newsletterId = Number(req.params.id)
     const uid = (req as UserRequest).user?.userid 
     if (uid) {
-        updateNewsletterById(newsletterId, uid, req.body).then((resp) => {
+        const elementsToUpdate = {newsletter_elements: req.body.newsletter_elements};
+        updateNewsletterById(newsletterId, uid, req.body.name, req.body.utctime, elementsToUpdate).then((resp) => {
             if (resp) {
                 res.status(200).send()
             }

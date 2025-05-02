@@ -19,10 +19,10 @@ export async function getNewsletterByNewsletterId(newsletterId: number): Promise
   }
 }
 
-export async function updateNewsletterById(newsletterId: number, userid: number, newsletterElements: NewsletterElementType) {
+export async function updateNewsletterById(newsletterId: number, userid: number, name:string, utctime: string, newsletterElements: NewsletterElementType) {
   try {
     return await db.updateTable('newsletters')
-    .set({ configuration: JSON.stringify(newsletterElements) })
+    .set({name: name, utctime: utctime, configuration: JSON.stringify(newsletterElements) })
     .where('id', '=', newsletterId)
     .where('userid', '=', userid)
     .executeTakeFirst();
@@ -38,7 +38,7 @@ export async function createNewNewsletter(userId: number): Promise<{id: number} 
       {
           'userid': userId,
           'name': 'Newsletter',
-          'utcTime': "23:59:59",
+          'utctime': "23:59:59",
           'configuration': JSON.stringify({'newsletter_elements': []})
       }).returning(['id']).executeTakeFirst()
   } catch (err) {
