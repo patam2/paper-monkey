@@ -1,9 +1,7 @@
-FROM python:3.12-slim
+FROM node:18-alpine AS back-end
 
-RUN pip install --upgrade pip
+WORKDIR /backend/
 
-COPY requirements.txt .
+RUN npm install
 
-RUN pip install -r requirements.txt
-
-COPY . .
+RUN npm run build

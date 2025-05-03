@@ -36,8 +36,8 @@ export function AppSidebar() {
                              </SidebarMenuItem>
                              <SidebarMenuItem>
                                 <SidebarMenuButton asChild>
-                                  <a href='#'>
-                                    <span>My newsletter</span>
+                                  <a href='/newsletter'>
+                                    <span>My newsletters</span>
                                   </a>
                                 </SidebarMenuButton>
                              </SidebarMenuItem>
