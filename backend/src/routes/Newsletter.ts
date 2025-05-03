@@ -1,9 +1,11 @@
 import { Router, Response, Request} from "express";
-import { updateNewsletterById, createNewNewsletter, getNewsletterByNewsletterId, getNewslettersByUserId } from "../utils/database/newsletter";
+import { updateNewsletterById, createNewNewsletter, getNewsletterByNewsletterId, getNewslettersByUserId, addJobIdToNewsletter } from "../utils/database/newsletter";
 import cookieCheckingMiddleware from "../utils/cookies/cookie-middleware";
 import { UserRequest } from "../app";
 import { NewsletterSchema } from '../models/newsletterElementTypes';
 
+//const { addNewNewsletter } = require('../bull/newsletter-queue')
+import { addNewNewsletter } from "../bull/newsletter-queue";
 var cookieParser = require('cookie-parser')
 
 
@@ -78,7 +80,11 @@ async function createNewsletter(req: Request, res: Response){
     if (uid) {
         try {
             var resp = await createNewNewsletter(uid)
+            const qId = await addNewNewsletter(resp!.id)
+            await addJobIdToNewsletter(resp!.id)
+            
         } catch (err) {
+            console.error(err)
             res.status(500).send({'error': err})
             return
         }

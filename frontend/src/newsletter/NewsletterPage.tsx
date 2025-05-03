@@ -22,7 +22,7 @@ export default function NewsletterHomePage() {
                                 <div className="text-black pb-3">
                                     <p className="text-xl">Newsletters</p>
                                 </div>
-                                {outlet || <><p className="text-black">Your newsletters:</p><NewsletterDisplayCards/></>}
+                                {outlet || <><NewsletterDisplayCards/></>}
                             </div>
                         </div>
                     </main>

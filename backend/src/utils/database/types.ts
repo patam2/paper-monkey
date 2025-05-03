@@ -37,6 +37,7 @@ export interface NewsletterTable {
     userid: number,
     name: string,
     utctime: string,
+    bulljobid: string,
     configuration: JSONColumnType<NewsletterElementType>
 }
 

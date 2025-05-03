@@ -32,12 +32,23 @@ export async function updateNewsletterById(newsletterId: number, userid: number,
   }
 }
 
+export async function addJobIdToNewsletter(newsletterId: number) {
+  try {
+    return await db.updateTable('newsletters').set({'bulljobid': "newsletterid:" + newsletterId.toString()}).where('id', '=', newsletterId).executeTakeFirst()
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
+  
+}
+
 export async function createNewNewsletter(userId: number): Promise<{id: number} | undefined> {
   try{
     return await db.insertInto('newsletters').values(
       {
           'userid': userId,
           'name': 'Newsletter',
+          'bulljobid': "",
           'utctime': "23:59:59",
           'configuration': JSON.stringify({'newsletter_elements': []})
       }).returning(['id']).executeTakeFirst()

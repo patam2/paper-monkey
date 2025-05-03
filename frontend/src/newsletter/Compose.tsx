@@ -147,37 +147,40 @@ export default function ComposeNewsletterPage() {
   return (
     <>
       <p className="text-black mb-2">Add and configure, or delete your daily Newsletter items here.</p>
-      <div className="flex flex-col items-center w-5/6 mb-3">
-        <div className="flex flex-row items-end justify-center text-xl w-full text-black">
-          <span className="break-all">Newsletter named</span>
-          <Input
-            onChange={(e) => setNewsletterName(e.target.value)}
-            value={newsletterName}
-            placeholder="Newsletter"
-            className="w-1/6 border-black mx-1 h-4/5 text-xl"
-          />
-          <span className="break-all">going out at</span>
-          <Input
-            onChange={handleHoursChange}
-            onBlur={handleHoursBlur}
-            value={hours}
-            inputMode='numeric'
-            placeholder="00"
-            maxLength={2}
-            className="w-1/12 border-black mx-1 h-4/5 text-center"
-          />
-          <span>:</span>
-          <Input
-            onChange={handleMinutesChange}
-            onBlur={handleMinutesBlur}
-            value={minutes}
-            placeholder="00"
-            inputMode='numeric'
-            maxLength={2}
-            className="w-1/12 border-black mx-1 h-4/5 text-center"
-          />
-        </div>
-      </div>
+      <div className="flex flex-col items-center mx-auto w-full max-w-4xl mb-3">
+  {/* Container for newsletter configuration */}
+  <div className="flex flex-col md:flex-row items-center justify-center w-5/6 text-xl text-black gap-2">
+    <span className="whitespace-nowrap">Newsletter named</span>
+    <Input
+      onChange={(e) => setNewsletterName(e.target.value)}
+      value={newsletterName}
+      placeholder="Newsletter"
+      className="md:w-1/4 w-full border-black text-xl"
+    />
+    <span className="whitespace-nowrap md:ml-4">going out at GMT time</span>
+    <div className="flex flex-row items-center">
+      <Input
+        onChange={handleHoursChange}
+        onBlur={handleHoursBlur}
+        value={hours}
+        inputMode="numeric"
+        placeholder="00"
+        maxLength={2}
+        className="w-16 border-black text-center"
+      />
+      <span className="mx-1 text-xl font-bold">:</span>
+      <Input
+        onChange={handleMinutesChange}
+        onBlur={handleMinutesBlur}
+        value={minutes}
+        placeholder="00"
+        inputMode="numeric"
+        maxLength={2}
+        className="w-16 border-black text-center"
+      />
+    </div>
+  </div>
+</div>
       <div className="w-5/6 flex items-center flex-col p-2 border-2 border-dashed border-black rounded-3xl">
         {newsletterItems.map((item, index) => {
           if (item.id === 'weather') {

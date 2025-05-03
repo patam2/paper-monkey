@@ -8,7 +8,9 @@ import './style.css'
 import Auth from './components/auth.tsx'
 
 createRoot(document.getElementById('root')!).render(
-    <BrowserRouter>
+    <>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/newsletter/" element={<NewsletterHomePage/>}>
@@ -17,4 +19,5 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/auth' element={<Auth/>} />
       </Routes>
     </BrowserRouter>
-)
+
+    </>)
