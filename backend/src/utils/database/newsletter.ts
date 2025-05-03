@@ -10,7 +10,7 @@ export async function getNewslettersByUserId(userId: number): Promise<Newsletter
   }
 }
 
-export async function getNewsletterByNewsletterId(newsletterId: number): Promise<Newsletter | undefined> {
+export async function getNewsletterById(newsletterId: number): Promise<Newsletter | undefined> {
   try {
     return await db.selectFrom('newsletters').where('id', '=', newsletterId).selectAll().executeTakeFirst();
   } catch (err) {
@@ -40,6 +40,15 @@ export async function addJobIdToNewsletter(newsletterId: number) {
     throw err
   }
   
+}
+
+export async function deleteNewsletterById(newsletterId: number, userId: number) {
+  try {
+    return await db.deleteFrom('newsletters').where('id', '=', newsletterId).where('userid', '=', userId).execute()
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
 }
 
 export async function createNewNewsletter(userId: number): Promise<{id: number} | undefined> {

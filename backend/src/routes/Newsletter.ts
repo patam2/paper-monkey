@@ -1,11 +1,11 @@
 import { Router, Response, Request} from "express";
-import { updateNewsletterById, createNewNewsletter, getNewsletterByNewsletterId, getNewslettersByUserId, addJobIdToNewsletter } from "../utils/database/newsletter";
+import { updateNewsletterById, createNewNewsletter, getNewsletterById, getNewslettersByUserId, addJobIdToNewsletter, deleteNewsletterById } from "../utils/database/newsletter";
 import cookieCheckingMiddleware from "../utils/cookies/cookie-middleware";
 import { UserRequest } from "../app";
 import { NewsletterSchema } from '../models/newsletterElementTypes';
 
 //const { addNewNewsletter } = require('../bull/newsletter-queue')
-import { addNewNewsletter } from "../bull/newsletter-queue";
+import { addNewNewsletter, deleteNewsletter } from "../bull/newsletter-queue";
 var cookieParser = require('cookie-parser')
 
 
@@ -28,7 +28,7 @@ async function getNewsletter(req: Request, res: Response) {
     }
 
     try {
-        var newsletter = await getNewsletterByNewsletterId(requestNewsletterId)
+        var newsletter = await getNewsletterById(requestNewsletterId)
     } catch {
         res.status(500).send('Internal server error')
     }
@@ -61,8 +61,14 @@ async function updateNewsletter(req: Request, res: Response) {
     const uid = (req as UserRequest).user?.userid 
     if (uid) {
         const elementsToUpdate = {newsletter_elements: req.body.newsletter_elements};
-        updateNewsletterById(newsletterId, uid, req.body.name, req.body.utctime, elementsToUpdate).then((resp) => {
+        const old_newsletter = await  getNewsletterById(newsletterId)
+        updateNewsletterById(newsletterId, uid, req.body.name, req.body.utctime, elementsToUpdate).then((resp) => 
+        {
             if (resp) {
+                if (req.body.utctime != old_newsletter!.utctime) {
+                    deleteNewsletter(newsletterId);
+                    addNewNewsletter(newsletterId, req.body.utctime)
+                }
                 res.status(200).send()
             }
             else{
@@ -80,7 +86,7 @@ async function createNewsletter(req: Request, res: Response){
     if (uid) {
         try {
             var resp = await createNewNewsletter(uid)
-            const qId = await addNewNewsletter(resp!.id)
+            const qId = await addNewNewsletter(resp!.id, "23:59:00")
             await addJobIdToNewsletter(resp!.id)
             
         } catch (err) {
@@ -109,8 +115,28 @@ async function getNewsletterByUser(req: Request, res: Response) {
     res.status(200).send({"newsletters": newsletters})
 }
 
+async function deleteNewsletterRequest(req: Request, res: Response) {
+    const newsletterId = Number(req.params.id)
+    const uid = (req as UserRequest).user!.userid
+    console.log(newsletterId, uid)
+    if (!uid) {
+        res.status(500).send('Internal server error')
+        return
+    }
+
+    try {
+        deleteNewsletterById(newsletterId, uid)
+        res.status(200).send({success: true})
+    } catch {
+        res.status(500).send('Internal server error')
+    }
+    
+    //deleteNewsletterById
+}
+
 
 newsletterRouter.post('/:id', updateNewsletter)
 newsletterRouter.get('/:id', getNewsletter)
 newsletterRouter.get('/all', getNewsletterByUser)
 newsletterRouter.put('/', createNewsletter)
+newsletterRouter.delete('/:id', deleteNewsletterRequest)
