@@ -1,7 +1,7 @@
 import { Queue, Job, Worker } from 'bullmq';
 import { QueueEvents } from 'bullmq';
-import { getNewsletterByNewsletterId } from '../utils/database/newsletter';
-
+import { getNewsletterById } from '../utils/database/newsletter';
+import ComposeEmail from './composeemail';
 
 const queueEvents = new QueueEvents('newsletter-processing');
 
@@ -12,17 +12,39 @@ export const emailQueue = new Queue('newsletter-processing', {
 export const processNewsletter = new Worker(
   'newsletter-processing',
   async (job: Job) => {
-    console.log(job.id);
-    const newsletter = await getNewsletterByNewsletterId(parseInt(job.id!.split(':')[1], 10))
+    const newsletter = await getNewsletterById(parseInt(job.id!.split(':')[2], 10))
     console.log(newsletter)
+    const r = await ComposeEmail(newsletter!)
+    console.log(r)
   },
   { connection: { url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}` } },
 );
 
-export const addNewNewsletter = async (jobId: number) => {
-  const queueELem = await emailQueue.add('processNewsletter', {}, { 'jobId':  `newsletterid:${jobId.toString()}`, delay: 60000});
+
+
+export const deleteNewsletter = async (newsletterId: number) => {
+  const result = await emailQueue.remove(`newsletterid:${newsletterId}`)
+  return (result === 1)
+}
+
+
+export const addNewNewsletter = async (jobId: number, time: string) => {
+  const splitTime = time.split(':');
+  const hours = splitTime[0]
+  const minutes = splitTime[1]
+  const queueELem = await emailQueue.upsertJobScheduler( 
+    `newsletterid:${jobId.toString()}`,
+    {
+      pattern: `0 ${minutes} ${hours} * * *`
+    },
+    {
+      'name': 'processNewsletter',
+    }
+  )
   return queueELem.id;
 };
+
+
 
 
 queueEvents.on('waiting', ({ jobId }) => {

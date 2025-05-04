@@ -6,5 +6,5 @@ interface ConfigureChosenElementProps {
 }
 
 export default function ConfigureChosenElement({chosenElement}: ConfigureChosenElementProps) {
-    return <>{chosenElement?.name}</>
+    return <>{chosenElement?.name   }</>
 }
