@@ -1218,6 +1218,11 @@ node-gyp-build-optional-packages@5.2.2:
   dependencies:
     detect-libc "^2.0.1"
 
+nodemailer@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-7.0.0.tgz#3dda775f202d279e1abaa9422428ff3ff35a8830"
+  integrity sha512-9QyEp969UmUWVDB2gVQvxHm1bqkyuC5YZIyX/ySJUpIVyXpuEFyBAuoFFs+G5/C2ZaUp9F5A65DPfxedfVHXXQ==
+
 nodemon@^3.1.10:
   version "3.1.10"
   resolved "https://registry.npmjs.org/nodemon/-/nodemon-3.1.10.tgz"

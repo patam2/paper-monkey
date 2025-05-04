@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ElementType } from '@/components/compose/comboboxselect';
 import ElementChooserDialog from '@/components/compose/elementchooser';
 import WeatherNewsletterItem from '@/components/compose/configurations/weather/weatherElementItem';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { Input } from '@/components/ui/input';
 
 type Params = {

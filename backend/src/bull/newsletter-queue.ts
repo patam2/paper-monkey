@@ -1,7 +1,7 @@
 import { Queue, Job, Worker } from 'bullmq';
 import { QueueEvents } from 'bullmq';
 import { getNewsletterById } from '../utils/database/newsletter';
-
+import ComposeEmail from './composeemail';
 
 const queueEvents = new QueueEvents('newsletter-processing');
 
@@ -14,6 +14,8 @@ export const processNewsletter = new Worker(
   async (job: Job) => {
     const newsletter = await getNewsletterById(parseInt(job.id!.split(':')[2], 10))
     console.log(newsletter)
+    const r = await ComposeEmail(newsletter!)
+    console.log(r)
   },
   { connection: { url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}` } },
 );

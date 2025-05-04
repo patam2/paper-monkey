@@ -65,9 +65,9 @@ async function updateNewsletter(req: Request, res: Response) {
         updateNewsletterById(newsletterId, uid, req.body.name, req.body.utctime, elementsToUpdate).then((resp) => 
         {
             if (resp) {
+                addNewNewsletter(newsletterId, req.body.utctime);
                 if (req.body.utctime != old_newsletter!.utctime) {
                     deleteNewsletter(newsletterId);
-                    addNewNewsletter(newsletterId, req.body.utctime)
                 }
                 res.status(200).send()
             }

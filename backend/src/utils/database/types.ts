@@ -28,7 +28,7 @@ export interface NewsletterElementType
         newsletter_elements: {
             "name": string,
             "id": string,
-            "settings": (RSSFeedElement | WeatherElement)[]
+            "settings": (RSSFeedElement['settings'] | WeatherElement['settings'])
         }[]
     }
 
