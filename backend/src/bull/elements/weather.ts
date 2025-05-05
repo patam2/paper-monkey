@@ -1,4 +1,4 @@
-import { WeatherElement } from "../newsletterElementTypes";
+import { WeatherElement } from "../../models/newsletterElementTypes";
 
 
 function createWeatherHtml(location: string, forecastDuration: string, weatherData: weatherData[][] ): string {

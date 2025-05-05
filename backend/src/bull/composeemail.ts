@@ -1,4 +1,4 @@
-import { getWeather } from "../models/elements/weather";
+import { getWeather } from "./elements/weather";
 import { Newsletter } from "../utils/database/types";
 
 const nodemailer = require("nodemailer");
