@@ -19,7 +19,7 @@ interface ElementProps {
 export function WeatherConfigureElement ({setSettings}: ElementProps) {
     var settingsCopy = useRef(WeatherElementSettings.parse({}))
     const selectValueChange = (value: string) => {
-        if (value === "Tomorrow" || value === "3 days" || value === "Week"){
+        if (value === "Tomorrow" || value === "4 days" || value === "Week"){
             settingsCopy.current.forecastDuration = value;
             setSettings(settingsCopy.current)
         }
@@ -37,7 +37,7 @@ export function WeatherConfigureElement ({setSettings}: ElementProps) {
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="Tomorrow">Tomorrow</SelectItem>
-                    <SelectItem value="3 days">3 days</SelectItem>
+                    <SelectItem value="4 days">4 days</SelectItem>
                     <SelectItem value="Week">Week</SelectItem>
                 </SelectContent>
             </Select>

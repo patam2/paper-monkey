@@ -1,15 +1,15 @@
+import { number } from "zod";
 import { WeatherElement } from "../../models/newsletterElementTypes";
 
 
-function createWeatherHtml(location: string, forecastDuration: string, weatherData: weatherData[][] ): string {
+function createWeatherHtml(location: string, forecastDuration: string, weatherData: weatherData[] ): string {
     let baseHtmlOutput = 
     `<div class="fw"><div class="bg-lightblue">${forecastDuration} report for ${location}</div><div  class="flex">`
-    for (let i = 0; i<weatherData.length; i++) {
-        console.log(weatherData[i])
+    for (let i = 0; i<weatherData.length; i += 2) {
         baseHtmlOutput += `<div class="p-10">` + 
-        `<h3>${weatherData[i][0].kp.split('-')[2].split('+')[0]}</h3>` +
-        `<p>Day: ${weatherData[i][1].temperatuur_min}-${weatherData[i][1].temperatuur_max}</p>` + 
-        `<p>Night: ${weatherData[i][0].temperatuur_min}-${weatherData[i][0].temperatuur_max}</p>` +
+        `<h3>${weatherData[i].time.split('-')[2].split('T')[0]}</h3>` +
+        `<p>Day: ${weatherData[i+1].data.instant.details.air_temperature} C</p>` + 
+        `<p>Night: ${weatherData[i].data.instant.details.air_temperature} C</p>` + 
         `</div>`
     }
     baseHtmlOutput += `</div></div>`
@@ -17,36 +17,76 @@ function createWeatherHtml(location: string, forecastDuration: string, weatherDa
 }
 
 interface weatherData { 
-    temperatuur_max: string,
-    kp: string,
-    ikoon: string,
-    temperatuur_min: string,
-    osa: 'day' | 'night',
-    sisu: string
+    time: string,
+    data: {
+        instant: {
+            details: {
+                "air_pressure_at_sea_level": number,
+                "air_temperature": number,
+                "cloud_area_fraction": number,
+                "relative_humidity": number,
+                "wind_from_direction": number,
+                "wind_speed": number
+            }
+        }
+    },
 }
 
 
 export async function getWeather({location, forecastDuration} : WeatherElement["settings"]): Promise<string | undefined> {
     const response = await fetch(
-        'https://publicapi.envir.ee/v1/forecasts/4DayForecast?forecastGroup=9&lang=eng', {
-            headers: {'accept': 'application/json'}
+        'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=59.4370&lon=24.7536', {
+            headers: {'accept': 'application/json', "user-agent": "Newsletter application"}
         }
     )
     const json = await response.json();
-    //console.log(json, response.status)
+    console.log(json, response.status)
     const weather = []
-    if (forecastDuration === "3 days") {
-        var iterStart
-        if (json.entries.entry.length === 8) {
-            iterStart = 2 
+    const date = new Date()
+
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    //console.log(month)
+    const startFromDay = date.getDate() + 1
+    console.log(startFromDay)
+    const daysInMonth = new Date(year, month, 0).getDate();
+    let count = 0
+    let j: number = startFromDay;
+    for (let i = 0; i<json.properties.timeseries.length; i+=1) {
+
+        if (forecastDuration === "4 days" && weather.length >= 8) {
+            break
         }
-        else {
-            iterStart = 1
+        else if (forecastDuration === "Tomorrow" && weather.length >= 2){
+            break
         }
-        console.log(iterStart)
-        for (let i = iterStart; i<json.entries.entry.length; i+=2) {
-            weather.push([json.entries.entry[i], json.entries.entry[i+1]])
+        else if (forecastDuration === "Week" && weather.length >= 14) {
+            break
         }
-        return createWeatherHtml(location, forecastDuration, weather)
+            
+        const data = json.properties.timeseries[i]
+        const day = (j % daysInMonth).toString().padStart(2, '0')
+        //console.log(daysInMonth, day, parseInt(day, 10))
+        if (Math.floor(parseInt(day, 10)/daysInMonth) > 0) {
+            month += 1
+            if (month > 12) {
+                month = 1;
+                year += 1
+            }
+        }
+        const monthString = month.toString().padStart(2, '0')
+        if (data.time === `${year}-${monthString}-${day}T00:00:00Z`) {
+            weather.push(data)
+            count ++
+        }
+        if (data.time === `${year}-${monthString}-${day}T12:00:00Z`) {
+            weather.push(data)
+            j += 1
+            count ++
+        }
+        //console.log(day)
+            //weather.push()
     }
+        //return wea
+    return createWeatherHtml(location, forecastDuration, weather)
 }

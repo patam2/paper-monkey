@@ -15,7 +15,7 @@ export interface WeatherElement {
     "name": "Weather",
     "settings": {
         "location": string,
-        "forecastDuration": "Tomorrow" | "3 days" | "Week"
+        "forecastDuration": "Tomorrow" | "4 days" | "Week"
     }
 }
 
@@ -34,7 +34,7 @@ export const WeatherElementSchema = z.object({
     name: z.literal("Weather"),
     settings: z.object({
         location: z.string(),
-        forecastDuration: z.enum(["Tomorrow", "3 days", "Week"])
+        forecastDuration: z.enum(["Tomorrow", "4 days", "Week"])
     })
 });
 

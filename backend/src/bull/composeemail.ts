@@ -23,7 +23,7 @@ export default async function ComposeEmail(newsletter: Newsletter) {
     for (let i = 0; i<newsletter.configuration.newsletter_elements.length; i++) {
         const element = newsletter.configuration.newsletter_elements[i];
         if (element.id === 'weather' && 'location' in element.settings) {
-            const output = await getWeather({location: element.settings.location, forecastDuration: '3 days'});
+            const output = await getWeather({location: element.settings.location, forecastDuration: element.settings.forecastDuration});
             emailbase += output 
             
         }
