@@ -16,7 +16,6 @@ async function handleLoginPostRequest(req: Request, res: Response): Promise<void
     res.send({ errors: 'Invalid json' });
     return;
   }
-  console.log(req.body);
   const userData = LoginUser.createFromForm(req.body);
   if ('errors' in userData) {
     res.status(403).send({ errors: userData.errors });

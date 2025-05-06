@@ -6,7 +6,7 @@ import { genSaltSync, hashSync } from 'bcrypt-ts';
 const UserCredentialsSchema = z.object({
   email: z.string().email("Email is not valid"),
   password: z.string().min(10, "Password length too low"),
-  name: z.string().optional(),
+  name: z.string().regex(RegExp("[a-zA-Z0-9]+"), 'Name is not valid') .optional(),
 });
 
 type UserCredentials = z.infer<typeof UserCredentialsSchema>;
