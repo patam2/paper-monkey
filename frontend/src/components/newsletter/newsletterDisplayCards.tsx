@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { useNavigate } from "react-router"
-import { Cross, DeleteIcon, Trash } from "lucide-react"
-import { number } from "zod"
+import { Trash } from "lucide-react"
 
 
 interface newsletterObject {
@@ -30,6 +29,9 @@ const NewsletterDisplayCards = () => {
           if ('newsletterId' in json) {
             navigate(`/newsletter/compose/${json.newsletterId.id}`) 
           }
+          if (data.status === 403) {
+            navigate('/auth')
+          }
         } catch (error) {
           console.error("Error fetching newsletters:", error);
         }
@@ -51,6 +53,9 @@ const NewsletterDisplayCards = () => {
           })
           setNewsletters({'newsletters': oldItems})
         }
+        else if (data.status === 403) {
+          navigate('/auth')
+        }
       } catch (error) {
         console.error("Error fetching newsletters:", error);
       }
@@ -67,7 +72,9 @@ const NewsletterDisplayCards = () => {
             const json = await data.json();
             setNewsletters(json)
             // Only after setting all items, mark firstUpdate as complete
-            
+            if (data.status === 403) {
+              navigate('/auth')
+            }
           } catch (error) {
             console.error("Error fetching newsletters:", error);
           }

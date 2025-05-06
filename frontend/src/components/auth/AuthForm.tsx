@@ -61,7 +61,7 @@ export function SignupForm() {
                                 Enter your name. You will be addressed by the name you choose.
                             </FormDescription>
                             <FormControl>
-                                <Input className="w-100" {...field}></Input>
+                                <Input className="w-full" {...field}></Input>
                             </FormControl>
 
                             <FormMessage />
@@ -81,7 +81,7 @@ export function SignupForm() {
                                 Enter your email address.
                             </FormDescription>
                             <FormControl>
-                                <Input className="w-100" {...field}></Input>
+                                <Input className="w-full" {...field}></Input>
                             </FormControl>
 
                             <FormMessage />
@@ -100,7 +100,7 @@ export function SignupForm() {
                                 Enter your password.
                             </FormDescription>
                             <FormControl>
-                                <Input type="password" className="w-100" {...field}></Input>
+                                <Input type="password" className="w-full" {...field}></Input>
                             </FormControl>
 
                             <FormMessage />
@@ -109,7 +109,7 @@ export function SignupForm() {
                     )}
                 />
 
-                <Button type="submit" className="w-100 cursor-pointer">Submit</Button>
+                <Button type="submit" className="w-full cursor-pointer">Submit</Button>
             </form>
         </Form>
     )

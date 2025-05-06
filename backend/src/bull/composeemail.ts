@@ -29,7 +29,7 @@ export default async function ComposeEmail(newsletter: Newsletter) {
         }
         
     }
-    sendEmail('patriktamm04@gmail.com', emailbase)
+    return emailbase
 }
 
 export async function sendEmail(target:string, content:string) {

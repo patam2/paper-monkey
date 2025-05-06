@@ -17,7 +17,7 @@ export default function ComposeNewsletterPage() {
   const [minutes, setMinutes] = useState<string>('59');
   const isInitialLoad = useRef(true);
   const { id } = useParams<Params>();
-
+  const navigate = useNavigate();
   // Effect for saving changes
   useEffect(() => {
     // Skip the first render
@@ -37,6 +37,10 @@ export default function ComposeNewsletterPage() {
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
         });
+
+        if (response.status === 403) {
+          navigate('/auth')
+        }
 
         if (!response.ok) {
           console.error('Failed to save newsletter:', response.status);

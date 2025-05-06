@@ -6,7 +6,11 @@ function createWeatherHtml(location: string, forecastDuration: string, weatherDa
     `<div class="fw"><div class="bg-lightblue">${forecastDuration} report for ${location}</div><div  class="flex">`
     for (let i = 0; i<weatherData.length; i++) {
         console.log(weatherData[i])
-        baseHtmlOutput += `<div class="p-10"><h3>${i + 1}</h3><p>${weatherData[i][0].temperatuur_max}-${weatherData[i][1].temperatuur_max}</p></div>`
+        baseHtmlOutput += `<div class="p-10">` + 
+        `<h3>${weatherData[i][0].kp.split('-')[2].split('+')[0]}</h3>` +
+        `<p>Day: ${weatherData[i][1].temperatuur_min}-${weatherData[i][1].temperatuur_max}</p>` + 
+        `<p>Night: ${weatherData[i][0].temperatuur_min}-${weatherData[i][0].temperatuur_max}</p>` +
+        `</div>`
     }
     baseHtmlOutput += `</div></div>`
     return baseHtmlOutput
@@ -34,11 +38,12 @@ export async function getWeather({location, forecastDuration} : WeatherElement["
     if (forecastDuration === "3 days") {
         var iterStart
         if (json.entries.entry.length === 8) {
-            iterStart = 0 
+            iterStart = 2 
         }
         else {
             iterStart = 1
         }
+        console.log(iterStart)
         for (let i = iterStart; i<json.entries.entry.length; i+=2) {
             weather.push([json.entries.entry[i], json.entries.entry[i+1]])
         }
