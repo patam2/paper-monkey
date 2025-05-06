@@ -25,7 +25,6 @@ async function handleLoginPostRequest(req: Request, res: Response): Promise<void
   try {
     const response = await getUserByEmail(userData.email);
     //if both are somehow undefined -> could lead to error. should fix!
-    console.log(response, userData.password);
     const authStatus = await compare(userData.password, response?.password || '');
     //console.log(response?.password, userData.password, await compare(response?.password || "", userData.password))
     if (authStatus) {
