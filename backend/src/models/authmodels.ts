@@ -1,6 +1,6 @@
-import { genSaltSync, hashSync } from "bcrypt-ts";
+//import { genSaltSync, hashSync } from "bcrypt-ts";
 import { z } from "zod";
-
+import { genSaltSync, hashSync } from 'bcrypt-ts';
 
 
 const UserCredentialsSchema = z.object({

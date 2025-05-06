@@ -9,6 +9,7 @@ export default async function cookieCheckingMiddleware(req: Request, res: Respon
     }
     if (!('user' in req.cookies)) {
         res.status(403).send({'Error': "No permissions"})
+        return
     }
     const resp = await AppRedisClient.getValue(req.cookies.user) 
     console.log(resp, req.cookies.user)
