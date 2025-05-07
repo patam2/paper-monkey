@@ -32,15 +32,15 @@ export default async function ComposeEmail(newsletter: Newsletter) {
     return emailbase
 }
 
-export async function sendEmail(target:string, content:string) {
+export async function sendEmail(target:string, emailName: string,content:string) {
     (async () => {
         const info = await transporter.sendMail({
           from: '"Garry Ankunding" <garry44@ethereal.email>',
           to: `${target}, ${target}`,
-          subject: "Your Newsletter",
+          subject: emailName,
           html: content, // HTML body
         });
-      
+        console.log(content)
         console.log("Message sent:", info.messageId);
       })();      
 }

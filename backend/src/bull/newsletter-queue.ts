@@ -17,7 +17,7 @@ export const processNewsletter = new Worker(
     const emailBody = await ComposeEmail(newsletter!)
     
     const userData = await getUserById(newsletter!.userid)
-    sendEmail(userData!.email, emailBody)
+    sendEmail(userData!.email, newsletter!.name, emailBody)
   },
   { connection: { url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}` } },
 );
