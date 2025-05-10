@@ -1,5 +1,5 @@
 import { Sun, CloudDrizzle, Cloudy } from "lucide-react"
-
+import { Button } from "./components/ui/button"
 
 function App() {
   document.body.classList.add("bg-stone-300")
@@ -59,7 +59,10 @@ function App() {
             </div>
           </div>
           <div className="mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-full text-xl">
-            Choose your own elements, modify them
+            RSS summary of chosen blogs 
+          </div>
+          <div className="mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-full text-xl">
+            <Button className="w-full bg-stone-600">Sign up!</Button>
           </div>
         </div>
       </div>

@@ -7,21 +7,21 @@ const fs = require('node:fs');
 
 const getWeatherIcon = (weatherType: string): string => {
     return `<img height="100" width="100" src='https://raw.githubusercontent.com/metno/weathericons/refs/heads/main/weather/png/${weatherType}.png'>`
-    //return fs.readFileSync(`icons/svg/${weatherType}.svg`)
+    // return fs.readFileSync(`icons/svg/${weatherType}.svg`)
 }
 
 
 function createWeatherHtml(location: string, forecastDuration: string, weatherData: weatherData[] ): string {
     let baseHtmlOutput = 
-    `<div class="fw"><div class="bg-lightblue">${forecastDuration} report for ${location}</div><div  class="flex">`
+    `<div class="fw"><div><h3>${forecastDuration} report for ${location}</h3></div><div class="flex">`
     for (let i = 0; i<weatherData.length; i += 2) {
         baseHtmlOutput += `<div class="p-10">` + 
         `<h3>${weatherData[i].time.split('-')[2].split('T')[0]}</h3>`;
         
         baseHtmlOutput += getWeatherIcon(weatherData[i+1].data.next_6_hours.summary.symbol_code)
 
-        baseHtmlOutput +=`<p>Day: ${weatherData[i+1].data.instant.details.air_temperature} C</p>` + 
-        `<p>Night: ${weatherData[i].data.instant.details.air_temperature} C</p>` + 
+        baseHtmlOutput +=`<p>Day: ${weatherData[i+1].data.instant.details.air_temperature}°</p>` + 
+        `<p>Night: ${weatherData[i].data.instant.details.air_temperature}°</p>` + 
         `</div>`
     }
     baseHtmlOutput += `</div></div>`
