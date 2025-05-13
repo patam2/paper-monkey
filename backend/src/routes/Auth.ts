@@ -28,7 +28,7 @@ async function handleLoginPostRequest(req: Request, res: Response): Promise<void
     //console.log(response?.password, userData.password, await compare(response?.password || "", userData.password))
     if (authStatus) {
       const cookie = generateCookie();
-      AppRedisClient.setValue(cookie, { userid: response!.user_id, name: response!.name });
+      AppRedisClient.setValue(cookie, { userid: response!.user_id, name: response!.name }, 86400);
       res
         .cookie('user', cookie)
         .status(200)

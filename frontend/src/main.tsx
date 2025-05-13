@@ -6,6 +6,8 @@ import ComposeNewsletterPage from './newsletter/Compose.tsx'
 
 import './style.css'
 import Auth from './components/auth.tsx'
+import Settings from './components/settings.tsx'
+import RSSSettings from './components/settings/rss.tsx'
 
 createRoot(document.getElementById('root')!).render(
     <>
@@ -17,6 +19,9 @@ createRoot(document.getElementById('root')!).render(
           <Route path="compose/:id" element={<ComposeNewsletterPage/>}/>
         </Route>
         <Route path='/auth' element={<Auth/>} />
+        <Route path='/settings/' element={<Settings/>}>
+          <Route path='rss' element={<RSSSettings/>}/>
+        </Route>
       </Routes>
     </BrowserRouter>
 

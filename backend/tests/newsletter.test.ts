@@ -14,3 +14,7 @@ test('GET /newsletter/all with admin account should return all', async () => {
     expect(response.text).toContain("newsletters")
 })
 
+test('GET /newsletter/all with an invalid cookie should return status 403', async () => {
+    const response = await request(app).get('/newsletter/all').set("cookie", "invalidCookie")
+    expect(response.status).toBe(403)
+})

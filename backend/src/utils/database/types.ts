@@ -13,6 +13,7 @@ import { RSSFeedElement, WeatherElement } from "../../models/newsletterElementTy
 export interface Database {
     users: UserTable;
     newsletters: NewsletterTable;
+    rss: RSSTable
 }
 
 export interface UserTable {
@@ -41,6 +42,10 @@ export interface NewsletterTable {
     configuration: JSONColumnType<NewsletterElementType>
 }
 
+export interface RSSTable {
+    user_id: number,
+    url: string
+}
 
 export type Newsletter = Selectable<NewsletterTable>
 export type NewNewsletter = Insertable<NewsletterTable>

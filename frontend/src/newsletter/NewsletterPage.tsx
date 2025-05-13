@@ -11,7 +11,7 @@ export default function NewsletterHomePage() {
     return (
         <>
             <SidebarProvider open={open} onOpenChange={setOpen}>
-                <AppSidebar/>
+                <AppSidebar activeElement="newsletters"/>
                 <SidebarInset className="">
                     <main className="h-full">
                         <div className="bg-stone-200 h-full">
