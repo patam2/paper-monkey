@@ -3,8 +3,6 @@ import { updateNewsletterById, createNewNewsletter, getNewsletterById, getNewsle
 import cookieCheckingMiddleware from "../utils/cookies/cookie-middleware";
 import { UserRequest } from "../app";
 import { NewsletterSchema } from '../models/newsletterElementTypes';
-
-//const { addNewNewsletter } = require('../bull/newsletter-queue')
 import { addNewNewsletter, deleteNewsletter } from "../bull/newsletter-queue";
 var cookieParser = require('cookie-parser')
 
@@ -58,6 +56,7 @@ async function updateNewsletter(req: Request, res: Response) {
         return
     }
     const newsletterId = Number(req.params.id)
+    
     const uid = (req as UserRequest).user?.userid 
     if (uid) {
         const elementsToUpdate = {newsletter_elements: req.body.newsletter_elements};

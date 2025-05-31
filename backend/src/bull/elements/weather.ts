@@ -1,109 +1,179 @@
-import { number } from "zod";
 import { WeatherElement } from "../../models/newsletterElementTypes";
 
+interface WeatherDetails {
+  air_pressure_at_sea_level: number;
+  air_temperature: number;
+  cloud_area_fraction: number;
+  relative_humidity: number;
+  wind_from_direction: number;
+  wind_speed: number;
+}
 
-const fs = require('node:fs');
+interface WeatherData {
+  time: string;
+  data: {
+    instant: {
+      details: WeatherDetails;
+    };
+    next_6_hours: {
+      summary: {
+        symbol_code: string;
+      };
+    };
+  };
+}
 
+interface WeatherResponse {
+  properties: {
+    timeseries: WeatherData[];
+  };
+}
+
+const FORECAST_LIMITS = {
+  "Tomorrow": 2,
+  "4 days": 8,
+  "Week": 14,
+} as const;
+
+type ForecastDuration = keyof typeof FORECAST_LIMITS;
 
 const getWeatherIcon = (weatherType: string): string => {
-    return `<img height="100" width="100" src='https://raw.githubusercontent.com/metno/weathericons/refs/heads/main/weather/png/${weatherType}.png'>`
-    // return fs.readFileSync(`icons/svg/${weatherType}.svg`)
-}
+  return `<img height="100" width="100" src="https://raw.githubusercontent.com/metno/weathericons/refs/heads/main/weather/png/${weatherType}.png" alt="${weatherType}">`;
+};
 
+const createWeatherHtml = (
+  location: string,
+  forecastDuration: string,
+  weatherData: WeatherData[]
+): string => {
+  let html = `
+    <div class="fw">
+      <div>
+        <h3>${forecastDuration} report for ${location}</h3>
+      </div>
+      <div class="flex">`;
 
-function createWeatherHtml(location: string, forecastDuration: string, weatherData: weatherData[] ): string {
-    let baseHtmlOutput = 
-    `<div class="fw"><div><h3>${forecastDuration} report for ${location}</h3></div><div class="flex">`
-    for (let i = 0; i<weatherData.length; i += 2) {
-        baseHtmlOutput += `<div class="p-10">` + 
-        `<h3>${weatherData[i].time.split('-')[2].split('T')[0]}</h3>`;
-        
-        baseHtmlOutput += getWeatherIcon(weatherData[i+1].data.next_6_hours.summary.symbol_code)
+  // Process weather data in pairs (night and day)
+  for (let i = 0; i < weatherData.length; i += 2) {
+    const nightData = weatherData[i];
+    const dayData = weatherData[i + 1];
+    
+    if (!nightData || !dayData) continue;
 
-        baseHtmlOutput +=`<p>Day: ${weatherData[i+1].data.instant.details.air_temperature}°</p>` + 
-        `<p>Night: ${weatherData[i].data.instant.details.air_temperature}°</p>` + 
-        `</div>`
+    const date = nightData.time.split('T')[0].split('-')[2];
+    const weatherIcon = getWeatherIcon(dayData.data.next_6_hours.summary.symbol_code);
+    const dayTemp = dayData.data.instant.details.air_temperature;
+    const nightTemp = nightData.data.instant.details.air_temperature;
+
+    html += `
+      <div class="p-10">
+        <h3>${date}</h3>
+        ${weatherIcon}
+        <p>Day: ${dayTemp}°</p>
+        <p>Night: ${nightTemp}°</p>
+      </div>`;
+  }
+
+  html += `
+      </div>
+    </div>`;
+
+  return html;
+};
+
+const getTargetDates = (forecastDuration: ForecastDuration): string[] => {
+  const dates: string[] = [];
+  const today = new Date();
+  const startDate = new Date(today);
+  startDate.setDate(today.getDate() + 1); // Start from tomorrow
+
+  const limit = FORECAST_LIMITS[forecastDuration];
+  const daysNeeded = Math.ceil(limit / 2); // Each day needs 2 entries (night and day)
+
+  for (let i = 0; i < daysNeeded; i++) {
+    const currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + i);
+    
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = currentDate.getDate().toString().padStart(2, '0');
+    
+    // Add both night (00:00) and day (12:00) times
+    dates.push(`${year}-${month}-${day}T00:00:00Z`);
+    dates.push(`${year}-${month}-${day}T12:00:00Z`);
+  }
+
+  return dates;
+};
+
+const filterWeatherData = (
+  timeseries: WeatherData[],
+  targetDates: string[],
+  limit: number
+): WeatherData[] => {
+  const filteredData: WeatherData[] = [];
+  const targetDateSet = new Set(targetDates);
+
+  for (const entry of timeseries) {
+    if (targetDateSet.has(entry.time)) {
+      filteredData.push(entry);
+      
+      if (filteredData.length >= limit) {
+        break;
+      }
     }
-    baseHtmlOutput += `</div></div>`
-    return baseHtmlOutput
-}
+  }
 
-interface weatherData { 
-    time: string,
-    data: {
-        instant: {
-            details: {
-                "air_pressure_at_sea_level": number,
-                "air_temperature": number,
-                "cloud_area_fraction": number,
-                "relative_humidity": number,
-                "wind_from_direction": number,
-                "wind_speed": number
-            }
-        }
-        next_6_hours: {
-            summary: {
-                symbol_code: "partlycloudy_day" | "fair_day" | "rainshowers_day"
-            }
-        }
-    },
-}
+  return filteredData;
+};
 
-
-export async function getWeather({location, forecastDuration} : WeatherElement["settings"]): Promise<string | undefined> {
+export async function getWeather({
+  location,
+  forecastDuration
+}: WeatherElement["settings"]): Promise<string | undefined> {
+  try {
     const response = await fetch(
-        'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=59.4370&lon=24.7536', {
-            headers: {'accept': 'application/json', "user-agent": "Newsletter application"}
+      'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=59.4370&lon=24.7536',
+      {
+        headers: {
+          'accept': 'application/json',
+          'user-agent': 'Newsletter application'
         }
-    )
-    const json = await response.json();
-    console.log(json, response.status)
-    const weather = []
-    const date = new Date()
+      }
+    );
 
-    let year = date.getFullYear()
-    let month = date.getMonth() + 1
-    //console.log(month)
-    const startFromDay = date.getDate() + 1
-    console.log(startFromDay)
-    const daysInMonth = new Date(year, month, 0).getDate();
-    let count = 0
-    let j: number = startFromDay;
-    for (let i = 0; i<json.properties.timeseries.length; i+=1) {
-
-        if (forecastDuration === "4 days" && weather.length >= 8) {
-            break
-        }
-        else if (forecastDuration === "Tomorrow" && weather.length >= 2){
-            break
-        }
-        else if (forecastDuration === "Week" && weather.length >= 14) {
-            break
-        }
-            
-        const data = json.properties.timeseries[i]
-        const day = (j % daysInMonth).toString().padStart(2, '0')
-        //console.log(daysInMonth, day, parseInt(day, 10))
-        if (Math.floor(parseInt(day, 10)/daysInMonth) > 0) {
-            month += 1
-            if (month > 12) {
-                month = 1;
-                year += 1
-            }
-        }
-        const monthString = month.toString().padStart(2, '0')
-        if (data.time === `${year}-${monthString}-${day}T00:00:00Z`) {
-            weather.push(data)
-            count ++
-        }
-        if (data.time === `${year}-${monthString}-${day}T12:00:00Z`) {
-            weather.push(data)
-            j += 1
-            count ++
-        }
-        //console.log(day)
-            //weather.push()
+    if (!response.ok) {
+      throw new Error(`Weather API request failed: ${response.status}`);
     }
-        //return wea
-    return createWeatherHtml(location, forecastDuration, weather)
+
+    const weatherResponse: WeatherResponse = await response.json();
+    
+    if (!weatherResponse.properties?.timeseries) {
+      throw new Error('Invalid weather data structure');
+    }
+
+    const duration = forecastDuration as ForecastDuration;
+    const limit = FORECAST_LIMITS[duration];
+    
+    if (!limit) {
+      throw new Error(`Unsupported forecast duration: ${forecastDuration}`);
+    }
+
+    const targetDates = getTargetDates(duration);
+    const filteredWeatherData = filterWeatherData(
+      weatherResponse.properties.timeseries,
+      targetDates,
+      limit
+    );
+
+    if (filteredWeatherData.length === 0) {
+      throw new Error('No weather data found for the requested period');
+    }
+
+    return createWeatherHtml(location, forecastDuration, filteredWeatherData);
+    
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    return undefined;
+  }
 }
