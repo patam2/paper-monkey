@@ -1,6 +1,6 @@
-import { createClient } from 'redis';
+import { createClient, RedisClientType } from 'redis';
 import { CookieData } from '../../../models/authmodels';
-import { string } from 'zod';
+
 
 export default class RedisClient {
     redisClient: any; 
@@ -56,5 +56,12 @@ export default class RedisClient {
         }
     }
 
+    async deleteValue(key: string): Promise<void> {
+        try {
+            await this.redisClient.del(key)
+        } catch (error) {
+            console.error('Error deleting string key', key, error)
+            }
+        }
 }
 

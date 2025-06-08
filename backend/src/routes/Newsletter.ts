@@ -51,7 +51,6 @@ async function updateNewsletter(req: Request, res: Response) {
     const result = NewsletterSchema.safeParse(req.body)
     
     if (!result.success) {
-        console.log(result, 'line 40')
         res.status(500).send({'errors': 'Invalid form data.'})
         return
     }

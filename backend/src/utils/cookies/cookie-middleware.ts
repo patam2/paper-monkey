@@ -5,6 +5,7 @@ import { CookieData } from "../../models/authmodels";
 
 export default async function cookieCheckingMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {
     if (!req.cookies) {
+        console.log('Middleware failing request due to cookies not being included. ')
         res.status(403).send({'error': "No permissions"})
         return
     }
