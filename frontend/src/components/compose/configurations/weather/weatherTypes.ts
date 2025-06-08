@@ -1,15 +1,6 @@
 import { z } from "zod";
 
 
-export interface RSSFeedElement {
-  "id": "rss_feed",
-  "name": "RSS feed",
-  "settings": {
-      "site": string,
-      "siteTitle": string,
-      "summarize": string
-  }
-}
 
 export type WeatherElement = {
   "id": "weather",

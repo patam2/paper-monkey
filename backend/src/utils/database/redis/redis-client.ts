@@ -1,5 +1,6 @@
 import { createClient } from 'redis';
 import { CookieData } from '../../../models/authmodels';
+import { string } from 'zod';
 
 export default class RedisClient {
     redisClient: any; 
@@ -11,9 +12,16 @@ export default class RedisClient {
         this.redisClient.connect()
     }
 
-    async setValue(key: string, value: CookieData, expireSeconds?: number): Promise<void> {
+    async setValue(key: string, value: CookieData | string, expireSeconds?: number): Promise<void> {
         try {
-            const serialized = JSON.stringify(value);
+            
+            if (typeof value !== "string") {
+                var serialized = JSON.stringify(value);
+            }
+            else {
+                var serialized = value
+            }
+            
             if (expireSeconds) {
                 this.redisClient.set(key, JSON.stringify(value))
             }
@@ -26,16 +34,27 @@ export default class RedisClient {
         }
     }
 
-    async getValue(key: string): Promise<CookieData | null> {
+    async getObject<T>(key: string): Promise<T | null> {
         try {
-            const val = await this.redisClient.get(key)
-            if (!val) return null;    
-            return JSON.parse(val) as CookieData
-    
+            const val = await this.redisClient.get(key);
+            if (!val) return null;
+            return JSON.parse(val) as T;
         } catch (error) {
-            console.error('Error setting key', error)
+            console.error('Error getting object key:', key, error);
+            throw error;
+        }
+    }
+
+    async getString(key: string): Promise<string | null> {
+        try {
+            const val = await this.redisClient.get(key);
+            if (!val) return null
+            return val
+        } catch (error) {
+            console.error('Error getting string key:', key, error)
             throw error
         }
     }
+
 }
 

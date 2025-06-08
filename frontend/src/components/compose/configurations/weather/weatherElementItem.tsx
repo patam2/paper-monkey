@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { EllipsisVertical } from "lucide-react"
 
 import {
@@ -24,7 +23,6 @@ interface NewsletterItemProps {
 
 export default function WeatherNewsletterItem ({settings, index, deleteFunction}: NewsletterItemProps) {
     console.log(settings)
-    const copiedSettings = {...settings}
     return (    
         <div className={"mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-full" }>
             <div className="w-full flex items-end justify-center">

@@ -1,7 +1,7 @@
 import express from "express";
 import apiRouter from "./routes/Auth";
 import { newsletterRouter } from "./routes/Newsletter";
-import { rssRouter } from "./routes/Rss";
+//import { rssRouter } from "./routes/Rss";
 import RedisClient from "./utils/database/redis/redis-client";
 import cors from 'cors'
 const app = express();
@@ -23,6 +23,6 @@ app.use(cors({
 app.use(express.json());
 app.use("/auth", apiRouter)
 app.use('/newsletter', newsletterRouter)
-app.use('/rss', rssRouter)
+//app.use('/rss', rssRouter)
 
 export default app

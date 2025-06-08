@@ -23,6 +23,7 @@ interface WeatherData {
   };
 }
 
+
 interface WeatherResponse {
   properties: {
     timeseries: WeatherData[];
