@@ -13,8 +13,8 @@ import { useEffect, useState } from "react"
 import { ComboboxPopover } from "./comboboxselect"
 import { ElementType } from "./comboboxselect"
 import { WeatherConfigureElement } from "./configurations/weather/weatherConfigure"
-
 import ConfigureChosenElement from "./configurechosenelement"
+import { RSSConfigureElement } from "./configurations/rss/rssConfigure"
 
 interface AddElementFunction {
     (element: ElementType): void
@@ -31,6 +31,7 @@ export default function ElementChooserDialog ({addElement}: ElementChooserDialog
     useEffect(() => {
         if (!chosenElement) return
         const copy = {...chosenElement}
+        console.log(copy)
         copy.settings! = settings
         setChosenElement(copy)
     }, [settings])
@@ -47,6 +48,7 @@ export default function ElementChooserDialog ({addElement}: ElementChooserDialog
                     <ConfigureChosenElement chosenElement={chosenElement}/>
                 </div>
                     {chosenElement?.id === 'weather' && <WeatherConfigureElement setSettings={setSettings}/>}
+                    {chosenElement?.id === 'rss_feed' && <RSSConfigureElement setSettings={setSettings}/>}
                 <DialogFooter className="justify-end">
                 <DialogClose asChild>
                         <Button type="button" variant="secondary">

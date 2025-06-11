@@ -5,6 +5,10 @@ import ElementChooserDialog from '@/components/compose/elementchooser';
 import WeatherNewsletterItem from '@/components/compose/configurations/weather/weatherElementItem';
 import { useParams, useNavigate } from 'react-router';
 import { Input } from '@/components/ui/input';
+import { WeatherElement } from '@/components/compose/configurations/weather/weatherTypes';
+import RSSElementItem from '@/components/compose/configurations/rss/rssElementItem';
+import { RSSElement } from '@/components/compose/configurations/rss/rssTypes';
+
 
 type Params = {
   id: string;
@@ -186,11 +190,21 @@ export default function ComposeNewsletterPage() {
             return (
               <WeatherNewsletterItem
                 key={index}
-                settings={item.settings}
+                item={item as WeatherElement}
                 index={index}
                 deleteFunction={deleteNewsletterItem}
               />
             );
+          };
+          if (item.id === "rss_feed") {
+            return (
+              <RSSElementItem
+                key={index}
+                item={item as RSSElement}
+                index={index}
+                deleteFunction={deleteNewsletterItem}
+              />
+            )
           }
           return null; // Return null for non-weather elements
         })}

@@ -9,28 +9,42 @@ import {
   } from "@/components/ui/select"
   
 
-import { WeatherElementSettingsType, WeatherElementSettings } from "./weatherTypes";
-
+import { WeatherElementSchema, WeatherElement  } from "./weatherTypes";
 
 interface ElementProps {
-    setSettings: (settings: WeatherElementSettingsType) => void 
+    setSettings: (settings: WeatherElement['settings']) => void 
 }
 
 export function WeatherConfigureElement ({setSettings}: ElementProps) {
-    var settingsCopy = useRef(WeatherElementSettings.parse({}))
+    var settingsCopy = useRef(WeatherElementSchema.parse({
+        id: "weather",          
+        name: "Weather",  
+        settings: {
+            location: "Tallinn",
+            forecastDuration: "Tomorrow"
+        }
+    }))
+    
     const selectValueChange = (value: string) => {
         if (value === "Tomorrow" || value === "4 days" || value === "Week"){
-            settingsCopy.current.forecastDuration = value;
-            setSettings(settingsCopy.current)
+            settingsCopy.current.settings.forecastDuration = value;
+            setSettings(settingsCopy.current.settings)
         }
     }
+    
     const changeValueChange = (value: React.ChangeEvent<HTMLInputElement>) => {
-        settingsCopy.current.location = value.target.value;
-        setSettings(settingsCopy.current)
+        settingsCopy.current.settings.location = value.target.value;
+        setSettings(settingsCopy.current.settings)
     }
+    
     return (
         <div className="flex">
-            <Input className="w-2/3" defaultValue="Tallinn" onChange={(value) => changeValueChange(value)} placeholder="Location"/>
+            <Input 
+                className="w-2/3" 
+                defaultValue="Tallinn" 
+                onChange={(value) => changeValueChange(value)} 
+                placeholder="Location"
+            />
             <Select onValueChange={(change) => selectValueChange(change)}>
                 <SelectTrigger className="w-1/3">
                     <SelectValue placeholder="Duration" />

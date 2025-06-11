@@ -9,24 +9,17 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
   
-import { WeatherElementSettingsType } from "./weatherTypes" 
+import { NewsletterItemProps } from "../types"
 
-interface DeleteFunc {
-    (index: number): void
-}
-interface NewsletterItemProps {
-    settings: WeatherElementSettingsType,
-    index: number
-    deleteFunction: DeleteFunc
-}
-
-
-export default function WeatherNewsletterItem ({settings, index, deleteFunction}: NewsletterItemProps) {
-    console.log(settings)
+export default function WeatherNewsletterItem ({item, index, deleteFunction}: NewsletterItemProps) {
+    console.log(item)
+    if (item.id != "weather") {
+        return <div>An error occured.</div>
+    }
     return (    
         <div className={"mb-2 rounded-2xl border-stone-500 text-center text-stone-950 p-3 border-2 w-full" }>
             <div className="w-full flex items-end justify-center">
-                <p className="flex flex-1 justify-center text-xl">Weather for {settings.location}</p>
+                <p className="flex flex-1 justify-center text-xl">Weather for {item.settings.location}</p>
                 <div className="flex justify-end    ms-auto">
                 <DropdownMenu>
                     <DropdownMenuTrigger><EllipsisVertical/></DropdownMenuTrigger>
@@ -38,7 +31,7 @@ export default function WeatherNewsletterItem ({settings, index, deleteFunction}
                 </DropdownMenu>
                 </div> 
             </div>
-            <p>This will show the forecast for the {settings.forecastDuration} time period.</p>
+            <p>This will show the forecast for the {item.settings.forecastDuration} time period.</p>
         </div>
     )
 }

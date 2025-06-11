@@ -10,3 +10,5 @@ Todo:
 [] Cookie deletion on logout
 
 [] Path visibility on pages
+
+and much more....
