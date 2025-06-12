@@ -18,9 +18,12 @@ export function RSSConfigureElement ({setSettings}: ElementProps) {
         }
     }))
         
-    const changeValueChange = (value: React.ChangeEvent<HTMLInputElement>, changed: "site" | "title") => {
+    const changeValueChange = (value: React.ChangeEvent<HTMLInputElement>, changed: "site" | "title" | "summarize") => {
         if (changed === "site") {
             settingsCopy.current.settings.site = value.target.value;
+        }
+        else if (changed === 'summarize') {
+            settingsCopy.current.settings.summarize = value.target.value
         }
         else {
             settingsCopy.current.settings.siteTitle = value.target.value
@@ -31,16 +34,22 @@ export function RSSConfigureElement ({setSettings}: ElementProps) {
     return (
         <div className="flex">
             <Input 
-                className="w-2/3" 
+                className="w-3/6" 
                 defaultValue="" 
                 onChange={(value) => changeValueChange(value, 'site')} 
                 placeholder="Site url"
             />
             <Input 
-                className="w-2/3" 
+                className="w-2/6" 
                 defaultValue="" 
                 onChange={(value) => changeValueChange(value, 'title')} 
                 placeholder="Site name"
+            />
+            <Input 
+                className="w-1/6" 
+                defaultValue="" 
+                onChange={(value) => changeValueChange(value, 'summarize')} 
+                placeholder="Limit of posts"
             />
         </div>
     )
